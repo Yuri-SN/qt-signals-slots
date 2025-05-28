@@ -24,20 +24,18 @@ public:
     void setStoppedState();
 
 private slots:
-    void onTimerTick();
     void toggleState();
     void onClearClick();
     void onLoopClick();
+    void onStopwatchTick();
 
-private:
+  private:
     Ui::MainWindow *ui;
     Stopwatch *m_stopWatch;
-    QTimer *m_timer;
 
     const QString m_buttonStartLabel{"Старт"};
     const QString m_buttonStopLabel{"Стоп"};
     const QString m_timerStartText{"00:00:00.0"};
-    const quint8 m_uptadeInterval{100};
 
     quint16 m_loopCount{1};
     qint64 m_loopTimeStart{0};

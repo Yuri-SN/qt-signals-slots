@@ -49,4 +49,6 @@ qint64 Stopwatch::getElapsedTime()
 void Stopwatch::onTimerTick()
 {
     m_totalTimeMs += m_tickInterval;
+
+    emit signalTimerTick();
 }

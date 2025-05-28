@@ -3,14 +3,14 @@
 #include <QObject>
 #include <QTimer>
 
-class Stopwatch : public QObject
-{
+class Stopwatch : public QObject {
     Q_OBJECT
 
-signals:
+  signals:
+    void signalTimerTick();
 
-public:
-    explicit Stopwatch(QObject *parent = nullptr);
+  public:
+    explicit Stopwatch(QObject* parent = nullptr);
     ~Stopwatch();
 
     void start();
@@ -21,11 +21,11 @@ public:
 
     qint64 getElapsedTime();
 
-private slots:
+  private slots:
     void onTimerTick();
 
-private:
-    QTimer *m_timer;
+  private:
+    QTimer* m_timer;
     qint64 m_totalTimeMs{0};
     bool m_isStarted{false};
 

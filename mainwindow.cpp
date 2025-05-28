@@ -8,9 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     m_stopWatch = new Stopwatch(this);
-    m_timer = new QTimer(this);
 
-    connect(m_timer, &QTimer::timeout, this, &MainWindow::onTimerTick);
+    connect(m_stopWatch, &Stopwatch::signalTimerTick, this, &MainWindow::onStopwatchTick);
 
     connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::toggleState);
     connect(ui->clearButton, &QPushButton::clicked, this, &MainWindow::onClearClick);
@@ -31,7 +30,7 @@ void MainWindow::setInitState()
     ui->clearButton->setText("Очистить");
     ui->loopButton->setText("Круг");
     ui->loopButton->setEnabled(false);
-    ui->infoLabel->setText("");
+    ui->textBrowser->clear();
 }
 
 void MainWindow::setStartedState()
@@ -39,7 +38,6 @@ void MainWindow::setStartedState()
     ui->loopButton->setEnabled(true);
     ui->startButton->setText(m_buttonStopLabel);
     m_stopWatch->start();
-    m_timer->start(m_uptadeInterval);
 }
 
 void MainWindow::setStoppedState()
@@ -47,15 +45,9 @@ void MainWindow::setStoppedState()
     ui->loopButton->setEnabled(false);
     ui->startButton->setText(m_buttonStartLabel);
     m_stopWatch->stop();
-    m_timer->stop();
 }
 
 // Slots
-
-void MainWindow::onTimerTick()
-{
-    ui->timeLabel->setText(convertTime(m_stopWatch->getElapsedTime()));
-}
 
 void MainWindow::toggleState()
 {
@@ -69,7 +61,7 @@ void MainWindow::toggleState()
 void MainWindow::onClearClick()
 {
     ui->timeLabel->setText(m_timerStartText);
-    ui->infoLabel->setText("");
+    ui->textBrowser->clear();
 
     m_loopTimeStart = 0;
     m_loopTimeStop = 0;
@@ -82,12 +74,15 @@ void MainWindow::onLoopClick()
 {
     m_loopTimeStop = m_stopWatch->getElapsedTime();
 
-    ui->infoLabel->setText(QString("Круг %1, время: %2 сек")
-                               .arg(m_loopCount)
-                               .arg(getSeconds(m_loopTimeStop - m_loopTimeStart)));
+    ui->textBrowser->append(
+        QString("Круг %1, время: %2 сек").arg(m_loopCount).arg(getSeconds(m_loopTimeStop - m_loopTimeStart)));
 
     m_loopCount += 1;
     m_loopTimeStart = m_stopWatch->getElapsedTime();
+}
+
+void MainWindow::onStopwatchTick() {
+    ui->timeLabel->setText(convertTime(m_stopWatch->getElapsedTime()));
 }
 
 // Private
