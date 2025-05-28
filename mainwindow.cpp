@@ -63,50 +63,14 @@ void MainWindow::onClearClick()
     ui->timeLabel->setText(m_timerStartText);
     ui->textBrowser->clear();
 
-    m_loopTimeStart = 0;
-    m_loopTimeStop = 0;
-    m_loopCount = 1;
-
     m_stopWatch->reset();
 }
 
 void MainWindow::onLoopClick()
 {
-    m_loopTimeStop = m_stopWatch->getElapsedTime();
-
-    ui->textBrowser->append(
-        QString("Круг %1, время: %2 сек").arg(m_loopCount).arg(getSeconds(m_loopTimeStop - m_loopTimeStart)));
-
-    m_loopCount += 1;
-    m_loopTimeStart = m_stopWatch->getElapsedTime();
+    ui->textBrowser->append(m_stopWatch->loopResult());
 }
 
 void MainWindow::onStopwatchTick() {
-    ui->timeLabel->setText(convertTime(m_stopWatch->getElapsedTime()));
-}
-
-// Private
-
-QString MainWindow::convertTime(qint64 timeInMs)
-{
-    quint8 hours = (timeInMs / 3600000);
-    quint8 minutes = (timeInMs / 60000) % 60;
-    QString seconds = getSeconds(timeInMs);
-
-    auto result = QString("%1:%2:%3")
-                      .arg(hours, 2, 10, QChar('0'))
-                      .arg(minutes, 2, 10, QChar('0'))
-                      .arg(seconds);
-
-    return result;
-}
-
-QString MainWindow::getSeconds(qint64 timeInMs)
-{
-    quint8 seconds = (timeInMs / 1000) % 60;
-    quint16 tenths = (timeInMs % 1000) / 100;
-
-    auto result = QString("%1.%2").arg(seconds, 2, 10, QChar('0')).arg(tenths);
-
-    return result;
+    ui->timeLabel->setText(m_stopWatch->getTime());
 }

@@ -36,11 +36,4 @@ private slots:
     const QString m_buttonStartLabel{"Старт"};
     const QString m_buttonStopLabel{"Стоп"};
     const QString m_timerStartText{"00:00:00.0"};
-
-    quint16 m_loopCount{1};
-    qint64 m_loopTimeStart{0};
-    qint64 m_loopTimeStop{0};
-
-    QString convertTime(qint64 timeInMs);
-    QString getSeconds(qint64 timeInMs);
 };
